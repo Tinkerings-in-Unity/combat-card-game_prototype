@@ -1871,6 +1871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1631348921}
+  - component: {fileID: 1631348922}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -1894,6 +1895,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1631348922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631348920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b3161c1bdcacf46a4354aa4e76c593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardSO: {fileID: 11400000, guid: 5b9191dc78b771e418f07b150ba064b0, type: 2}
+  currentHealth: 5
+  attackPower: 2
+  manaCost: 3
+  healthText: {fileID: 1580436507}
+  attackText: {fileID: 323361469}
+  costText: {fileID: 1641265927}
+  nameText: {fileID: 2038082767}
+  actionText: {fileID: 1388837146}
+  loreText: {fileID: 799614951}
+  characterImage: {fileID: 1227086469}
+  backgroundImage: {fileID: 1163145517}
 --- !u!1 &1641265925
 GameObject:
   m_ObjectHideFlags: 0
