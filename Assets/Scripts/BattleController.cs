@@ -11,6 +11,8 @@ public class BattleController : MonoBehaviour
 
     public int playerMana;
 
+    [SerializeField] private int startingCardsAmount = 5;
+
     private void Awake()
     {
         Instance = this;
@@ -21,6 +23,8 @@ public class BattleController : MonoBehaviour
     {
         playerMana = startingMana;
         UIController.Instance.SetPlayerManaText(playerMana);
+        
+        DeckController.Instance.DrawMultipleCards(startingCardsAmount);
     }
 
     // Update is called once per frame

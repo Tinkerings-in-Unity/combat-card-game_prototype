@@ -1,16 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
-
+    public static HandController Instance;
+    
     public List<Card> heldCards = new List<Card>();
 
     public Transform minPos, maxPos;
     public List<Vector3> cardPositions = new List<Vector3>();
-    
-    
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +63,12 @@ public class HandController : MonoBehaviour
             Debug.LogError("Card at position " + cardToRemove.handPosition + "is not the card being removed");
         }
         
+        SetCardPositionsInHand();
+    }
+
+    public void AddCardToHand(Card cardToAdd)
+    {
+        heldCards.Add(cardToAdd);
         SetCardPositionsInHand();
     }
 }

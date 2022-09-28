@@ -11,6 +11,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private TMP_Text playerManaText;
     [SerializeField] private GameObject lowManaWarningLabel;
     [SerializeField] private float lowManaWarningTime;
+    [SerializeField] private GameObject drawCardButton;
     private float _lowManaWarningCounter;
 
     private void Awake()
@@ -47,5 +48,13 @@ public class UIController : MonoBehaviour
     {
         lowManaWarningLabel.SetActive(true);
         _lowManaWarningCounter = lowManaWarningTime;
+    }
+    
+    public void DrawCard()
+    {
+        if (!DeckController.Instance.DrawCardForMana())
+        {
+            drawCardButton.SetActive(false);
+        }
     }
 }
