@@ -88,15 +88,25 @@ public class Card : MonoBehaviour
 
                     if (selectedCardPlacementPoint.activeCard == null && selectedCardPlacementPoint.isPlayerPoint)
                     {
-                        selectedCardPlacementPoint.activeCard = this;
-                        _assignedPlacePoint = selectedCardPlacementPoint;
-                        
-                        MoveToPosition(selectedCardPlacementPoint.transform.position, Quaternion.identity);
+                        if (BattleController.Instance.playerMana >= manaCost)
+                        {
+                            selectedCardPlacementPoint.activeCard = this;
+                            _assignedPlacePoint = selectedCardPlacementPoint;
 
-                        inHand = false;
-                        _isSelected = false;
-                        
-                        _handController.RemoveCardFromHand(this);
+                            MoveToPosition(selectedCardPlacementPoint.transform.position, Quaternion.identity);
+
+                            inHand = false;
+                            _isSelected = false;
+
+                            _handController.RemoveCardFromHand(this);
+                            
+                            BattleController.Instance.SpendPlayerMana(manaCost);
+                        }
+                        else
+                        {
+                            UIController.Instance.ShowLowManaWarning();
+                            ReturnToHand();
+                        }
                     }
                     else
                     {
