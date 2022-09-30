@@ -80,9 +80,9 @@ public class Card : MonoBehaviour
                 ReturnToHand();
             }
             
-            if (Input.GetMouseButtonDown(0) && !_justPressed)
+            if (Input.GetMouseButtonDown(0) && !_justPressed )
             {
-                if (Physics.Raycast(ray, out hit, 100f, placementLayer))
+                if (Physics.Raycast(ray, out hit, 100f, placementLayer) && BattleController.Instance.currentPhase == TurnOrder.PlayerActive)
                 {
                     var selectedCardPlacementPoint = hit.collider.GetComponent<CardPlacePoint>();
 
@@ -148,15 +148,14 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (inHand)
-        {
-            _isSelected = true;
-            _cardCollider.enabled = false;
+        if (!inHand || BattleController.Instance.currentPhase != TurnOrder.PlayerActive) return;
+        
+        _isSelected = true;
+        _cardCollider.enabled = false;
 
-            _justPressed = true;
+        _justPressed = true;
             
-            MoveToPosition(_handController.cardPositions[handPosition] + new Vector3(0f,0.1f,0.7f), _targetRotation);
-        }
+        MoveToPosition(_handController.cardPositions[handPosition] + new Vector3(0f,0.1f,0.7f), _targetRotation);
     }
 
     public void ReturnToHand()

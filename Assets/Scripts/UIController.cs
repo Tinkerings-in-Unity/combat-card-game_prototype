@@ -11,8 +11,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private TMP_Text playerManaText;
     [SerializeField] private GameObject lowManaWarningLabel;
     [SerializeField] private float lowManaWarningTime;
-    [SerializeField] private GameObject drawCardButton;
+    public GameObject drawCardButton;
+    public GameObject endTurnButton;
     private float _lowManaWarningCounter;
+    
 
     private void Awake()
     {
@@ -56,5 +58,10 @@ public class UIController : MonoBehaviour
         {
             drawCardButton.SetActive(false);
         }
+    }
+
+    public void EndPlayerTurn()
+    {
+        BattleController.Instance.EndPlayerTurn();
     }
 }
