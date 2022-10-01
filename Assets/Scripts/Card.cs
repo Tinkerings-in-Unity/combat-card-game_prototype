@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     public CardScriptableObject cardSO;
+
+    public bool isPlayer;
      
     public int currentHealth, attackPower, manaCost = 0;
 
@@ -23,17 +25,26 @@ public class Card : MonoBehaviour
 
     public LayerMask desktopLayer, placementLayer;
 
+    public Animator Animator => animator;
+
     private Vector3 _targetPosition;
     private Quaternion _targetRotation;
     private HandController _handController = null;
     private bool _isSelected = false;
     private Collider _cardCollider;
     private bool _justPressed = false;
-    private CardPlacePoint _assignedPlacePoint = null;
+    [SerializeField] private CardPlacePoint assignedPlacePoint = null;
+    [SerializeField] private Animator animator = null;
     
     // Start is called before the first frame update
     void Start()
     {
+        if (_targetPosition == Vector3.zero)
+        {
+            _targetPosition = transform.position;
+            _targetRotation = transform.rotation;
+        }
+        
         SetupCard();
 
         _handController = FindObjectOfType<HandController>();
@@ -46,9 +57,7 @@ public class Card : MonoBehaviour
         attackPower = cardSO.attackPower;
         manaCost = cardSO.manaCost;
         
-        healthText.text = currentHealth.ToString();
-        attackText.text = attackPower.ToString();
-        costText.text = manaCost.ToString();
+        UpdateCardDisplay();
 
         nameText.text = cardSO.cardName;
         actionText.text = cardSO.actionDescription;
@@ -56,6 +65,13 @@ public class Card : MonoBehaviour
 
         characterImage.sprite = cardSO.characterSprite;
         backgroundImage.sprite = cardSO.backgroundSprite;
+    }
+
+    public void UpdateCardDisplay()
+    {
+        healthText.text = currentHealth.ToString();
+        attackText.text = attackPower.ToString();
+        costText.text = manaCost.ToString();
     }
 
     // Update is called once per frame
@@ -91,7 +107,7 @@ public class Card : MonoBehaviour
                         if (BattleController.Instance.playerMana >= manaCost)
                         {
                             selectedCardPlacementPoint.activeCard = this;
-                            _assignedPlacePoint = selectedCardPlacementPoint;
+                            assignedPlacePoint = selectedCardPlacementPoint;
 
                             MoveToPosition(selectedCardPlacementPoint.transform.position, Quaternion.identity);
 
@@ -132,7 +148,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (inHand)
+        if (inHand && isPlayer)
         {
             MoveToPosition(_handController.cardPositions[handPosition] + new Vector3(0f,0.2f,0.7f), _targetRotation);
         }
@@ -140,7 +156,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (inHand && ! _isSelected)
+        if (inHand && ! _isSelected && isPlayer)
         {
             MoveToPosition(_handController.cardPositions[handPosition], _targetRotation);
         }
@@ -148,7 +164,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!inHand || BattleController.Instance.currentPhase != TurnOrder.PlayerActive) return;
+        if (!inHand || BattleController.Instance.currentPhase != TurnOrder.PlayerActive || !isPlayer) return;
         
         _isSelected = true;
         _cardCollider.enabled = false;
@@ -164,5 +180,27 @@ public class Card : MonoBehaviour
         _cardCollider.enabled = true;
         
         MoveToPosition(_handController.cardPositions[handPosition], _targetRotation);
+    }
+
+    public void DamageCard(int damageAmount)
+    {
+        currentHealth -= damageAmount;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+
+            assignedPlacePoint.activeCard = null;
+            
+            MoveToPosition(BattleController.Instance.discardPoint.position, BattleController.Instance.discardPoint.rotation);
+            
+            animator.SetTrigger("Jump");
+            
+            Destroy(gameObject, 5f);
+        }
+        
+        animator.SetTrigger("Hurt");
+
+        UpdateCardDisplay();
     }
 }
