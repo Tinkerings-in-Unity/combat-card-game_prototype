@@ -40,15 +40,18 @@ public class BattleController : MonoBehaviour
         FillPlayerMana();
         
         DeckController.Instance.DrawMultipleCards(startingCardsAmount);
+        
+        UIController.Instance.SetPlayerHealthText(playerHealth);
+        UIController.Instance.SetEnemyHealthText(enemyHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            AdvanceTurn();
-        }
+        // if (Input.GetKeyDown(KeyCode.T))
+        // {
+        //     AdvanceTurn();
+        // }
     }
 
     public void SpendPlayerMana(int amountToSpend)
@@ -127,6 +130,12 @@ public class BattleController : MonoBehaviour
                 
                 //End battle
             }
+            
+            UIController.Instance.SetPlayerHealthText(playerHealth);
+            
+            var damageText = Instantiate(UIController.Instance.PlayerDamageText, UIController.Instance.transform);
+            damageText.SetDamage(damageAmount);
+            damageText.gameObject.SetActive(true);
         }
     }
     
@@ -142,6 +151,12 @@ public class BattleController : MonoBehaviour
                 
                 //End battle
             }
+            
+            UIController.Instance.SetEnemyHealthText(enemyHealth);
+            
+            var damageText = Instantiate(UIController.Instance.EnemyDamageText, UIController.Instance.transform);
+            damageText.SetDamage(damageAmount);
+            damageText.gameObject.SetActive(true);
         }
     }
 }
