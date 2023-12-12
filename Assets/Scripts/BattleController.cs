@@ -14,7 +14,7 @@ public class BattleController : MonoBehaviour
     
     public int startingMana = 4, maxMana = 12;
 
-    public int playerMana;
+    public int playerMana, enemyMana;
 
     public TurnOrder currentPhase;
 
@@ -25,7 +25,7 @@ public class BattleController : MonoBehaviour
 
     [SerializeField] private int startingCardsAmount = 5;
     [SerializeField] private int cardsToDrawPerTurn = 2;
-    private int _currentPlayerMaxMana;
+    private int _currentPlayerMaxMana, _currentEnemyMaxMana;
 
     private void Awake()
     {
@@ -100,7 +100,7 @@ public class BattleController : MonoBehaviour
                 break;
             case TurnOrder.EnemyActive:
                 
-                AdvanceTurn();
+                EnemyController.Instance.StartAction();
                 
                 break; 
             case TurnOrder.EnemyCardAttacks:

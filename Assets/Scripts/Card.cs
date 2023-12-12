@@ -190,8 +190,11 @@ public class Card : MonoBehaviour
         {
             currentHealth = 0;
 
-            assignedPlacePoint.activeCard = null;
-            
+            if (inHand)
+            {
+                assignedPlacePoint.activeCard = null;
+            }
+
             MoveToPosition(BattleController.Instance.discardPoint.position, BattleController.Instance.discardPoint.rotation);
             
             animator.SetTrigger("Jump");
